@@ -34,7 +34,7 @@ class Timer extends React.Component {
   // lifecycle methods
   componentDidUpdate(_, prevState) {
     if (prevState['currentTime'] === 0) {
-      this.endOfTimer()
+      this.timeOut()
     }
   }
   
@@ -73,7 +73,7 @@ class Timer extends React.Component {
     })
   }
   
-  endOfTimer() {
+  timeOut() {
     this.state.inSession
       ? this.beginBreak()
       : this.beginSession()
@@ -165,9 +165,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps() {
-  return {
-    switchMode,
-  }
+  return { switchMode };
 }
 
 export default connect(
