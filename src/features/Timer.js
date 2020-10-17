@@ -1,0 +1,179 @@
+import {
+   MINUTE_MS,
+   MINUTE_S,
+   SECOND_MS
+} from '../constants'
+
+import React from 'react'
+import ReactTimeout from 'react-timeout'
+import { connect } from 'react-redux'
+import { switchMode } from './pomodoroSlice'
+
+/* eslint-disable no-useless-constructor */
+
+class Timer extends React.Component {
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      currentTime: this.props.sessionLength,
+      inSession: this.props.inSession,
+      paused: true,
+    }
+    
+    this.beginBreak = this.beginBreak.bind(this)
+    this.beginSession = this.beginSession.bind(this)
+    this.changeMode = this.changeMode.bind(this)
+    this.handleTimer = this.handleTimer.bind(this)
+    this.resetTimer = this.resetTimer.bind(this)
+    this.skip = this.skip.bind(this)
+    this.togglePause = this.togglePause.bind(this)
+  }
+  
+  // class methods
+  beginBreak() {
+    this.setState(() => {
+      return {
+        currentTime: this.props.breakLength,
+        paused: true,
+      };
+    })
+  }
+  
+  beginSession() {
+    this.setState(() => {
+      return {
+        currentTime: this.props.sessionLength,
+        paused: true,
+      };
+    })
+  }
+
+  changeMode() {
+    this.props.switchMode()
+    this.setState(() => {
+      return { inSession: !this.props.inSession };
+    })
+  }
+  
+  endOfTimer() {
+    this.props.inSession
+      ? this.beginBreak()
+      : this.beginSession()
+    
+    this.props.switchMode()
+    this.changeMode()
+  }
+
+  handleTimer() {
+    if (this.state.paused) {
+      this.togglePause()
+      this.props.setInterval(() => {
+        this.setState(state => {
+          return { currentTime: state.currentTime - SECOND_MS };
+        })
+      }, SECOND_MS);
+    } else {
+      this.togglePause()
+      this.props.clearInterval()
+    }
+  }
+
+  togglePause() {
+    this.setState(state => {
+      return { paused: !state.paused };
+    })
+  }
+
+  resetTimer() {
+    this.props.inSession
+      ? this.beginSession()
+      : this.beginBreak()
+  }
+
+  skip() {
+    /*
+    the reason for this existing is that
+    if a session is ever manually skipped,
+    then skip() will NOT increment the
+    amount of sessions completed (once
+    that part of the app is implemented)
+
+    also i'm repeating logic that's in other
+    methods here because i need to change all of
+    state in one go, and i can't split this between
+    re-renders because the key attributes will
+    dismount the current component and make a new one
+    if i try and change them individually and i don't want
+    one method to cause two re-renders
+    */
+    
+    if (this.state.inSession) {
+      this.props.switchMode()
+      this.setState((state, props) => {
+        return {
+          currentTime: props.breakLength,
+          inSession: !state.inSession,
+          paused: true,
+        };
+      })
+    } else {
+      this.props.switchMode()
+      this.setState((state, props) => {
+        return {
+          currentTime: props.sessionLength,
+          inSession: !state.inSession,
+          paused: true,
+        };
+      })
+    }
+  }
+
+  render() {
+    let ms = this.state.currentTime
+    let seconds = Math.floor(ms / SECOND_MS) % MINUTE_S
+    let minutes = Math.floor(ms / MINUTE_MS) % MINUTE_S
+
+    seconds = ('0' + seconds).slice(-2)
+    minutes = ('0' + minutes).slice(-2)
+    
+    return (
+      <div id='timer'>
+        <h2 id='label' key={this.state.inSession}>
+          {this.state.inSession ? 'session' : 'break'}
+        </h2>
+        <h1 data-testid='stopwatch' id='stopwatch'>
+          {`${minutes}:${seconds}`}
+        </h1>
+        <button data-testid='pause' id='pause' onClick={this.togglePause}>
+          pause
+        </button>
+        <button id='reset' onClick={this.resetTimer}>
+          reset
+        </button>
+        <button id='skip' onClick={this.skip}>
+          skip
+        </button>
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    breakLength: state['DEFAULT_BREAK'],
+    inSession: state['inSession'],
+    sessionLength: state['DEFAULT_SESSION'],
+  };
+}
+
+function mapDispatchToProps() {
+  return {
+    switchMode,
+  }
+}
+
+export default ReactTimeout(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timer))
