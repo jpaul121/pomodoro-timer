@@ -5,7 +5,6 @@ import {
 } from '../constants'
 
 import React from 'react'
-import ReactTimeout from 'react-timeout'
 import { connect } from 'react-redux'
 import { switchMode } from './pomodoroSlice'
 
@@ -19,11 +18,13 @@ class Timer extends React.Component {
       currentTime: this.props.sessionLength,
       inSession: this.props.inSession,
       paused: true,
+      timerId: null,
     }
     
     this.beginBreak = this.beginBreak.bind(this)
     this.beginSession = this.beginSession.bind(this)
     this.changeMode = this.changeMode.bind(this)
+    this.clearTimer = this.clearTimer.bind(this)
     this.handleTimer = this.handleTimer.bind(this)
     this.resetTimer = this.resetTimer.bind(this)
     this.skip = this.skip.bind(this)
@@ -32,18 +33,20 @@ class Timer extends React.Component {
   
   // class methods
   beginBreak() {
-    this.setState(() => {
+    this.clearTimer()
+    this.setState((_, props) => {
       return {
-        currentTime: this.props.breakLength,
+        currentTime: props.breakLength,
         paused: true,
       };
     })
   }
   
   beginSession() {
-    this.setState(() => {
+    this.clearTimer()
+    this.setState((_, props) => {
       return {
-        currentTime: this.props.sessionLength,
+        currentTime: props.sessionLength,
         paused: true,
       };
     })
@@ -51,8 +54,15 @@ class Timer extends React.Component {
 
   changeMode() {
     this.props.switchMode()
+    this.setState((_, props) => {
+      return { inSession: !props.inSession };
+    })
+  }
+
+  clearTimer() {
+    clearInterval(this.state.timerId)
     this.setState(() => {
-      return { inSession: !this.props.inSession };
+      return { timerId: null };
     })
   }
   
@@ -68,14 +78,17 @@ class Timer extends React.Component {
   handleTimer() {
     if (this.state.paused) {
       this.togglePause()
-      this.props.setInterval(() => {
+      const newTimer = setInterval(() => {
         this.setState(state => {
           return { currentTime: state.currentTime - SECOND_MS };
         })
-      }, SECOND_MS);
+      }, SECOND_MS)
+      this.setState(() => {
+        return { timerId: newTimer };
+      })
     } else {
       this.togglePause()
-      this.props.clearInterval()
+      this.clearTimer()
     }
   }
 
@@ -117,6 +130,7 @@ class Timer extends React.Component {
           paused: true,
         };
       })
+      this.beginBreak()
     } else {
       this.props.switchMode()
       this.setState((state, props) => {
@@ -126,6 +140,7 @@ class Timer extends React.Component {
           paused: true,
         };
       })
+      this.beginSession()
     }
   }
 
@@ -145,7 +160,7 @@ class Timer extends React.Component {
         <h1 data-testid='stopwatch' id='stopwatch'>
           {`${minutes}:${seconds}`}
         </h1>
-        <button data-testid='pause' id='pause' onClick={this.togglePause}>
+        <button data-testid='pause' id='pause' onClick={this.handleTimer}>
           pause
         </button>
         <button id='reset' onClick={this.resetTimer}>
@@ -173,7 +188,7 @@ function mapDispatchToProps() {
   }
 }
 
-export default ReactTimeout(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Timer))
+)(Timer)
