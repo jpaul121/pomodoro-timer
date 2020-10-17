@@ -31,6 +31,13 @@ class Timer extends React.Component {
     this.togglePause = this.togglePause.bind(this)
   }
   
+  // lifecycle methods
+  componentDidUpdate(_, prevState) {
+    if (prevState['currentTime'] === 0) {
+      this.endOfTimer()
+    }
+  }
+  
   // class methods
   beginBreak() {
     this.clearTimer()
@@ -54,8 +61,8 @@ class Timer extends React.Component {
 
   changeMode() {
     this.props.switchMode()
-    this.setState((_, props) => {
-      return { inSession: !props.inSession };
+    this.setState(state => {
+      return { inSession: !state.inSession };
     })
   }
 
@@ -67,24 +74,23 @@ class Timer extends React.Component {
   }
   
   endOfTimer() {
-    this.props.inSession
+    this.state.inSession
       ? this.beginBreak()
       : this.beginSession()
-    
-    this.props.switchMode()
+
     this.changeMode()
   }
 
   handleTimer() {
     if (this.state.paused) {
       this.togglePause()
-      const newTimer = setInterval(() => {
+      const timerId = setInterval(() => {
         this.setState(state => {
           return { currentTime: state.currentTime - SECOND_MS };
         })
       }, SECOND_MS)
       this.setState(() => {
-        return { timerId: newTimer };
+        return { timerId };
       })
     } else {
       this.togglePause()
@@ -105,40 +111,16 @@ class Timer extends React.Component {
   }
 
   skip() {
-    /*
-    the reason for this existing is that
-    if a session is ever manually skipped,
-    then skip() will NOT increment the
-    amount of sessions completed (once
-    that part of the app is implemented)
-
-    also i'm repeating logic that's in other
-    methods here because i need to change all of
-    state in one go, and i can't split this between
-    re-renders because the key attributes will
-    dismount the current component and make a new one
-    if i try and change them individually and i don't want
-    one method to cause two re-renders
-    */
-    
     if (this.state.inSession) {
-      this.props.switchMode()
-      this.setState((state, props) => {
-        return {
-          currentTime: props.breakLength,
-          inSession: !state.inSession,
-          paused: true,
-        };
+      this.changeMode()
+      this.setState((_, props) => {
+        return { currentTime: props.breakLength };
       })
       this.beginBreak()
     } else {
-      this.props.switchMode()
-      this.setState((state, props) => {
-        return {
-          currentTime: props.sessionLength,
-          inSession: !state.inSession,
-          paused: true,
-        };
+      this.changeMode()
+      this.setState((_, props) => {
+        return { currentTime: props.sessionLength };
       })
       this.beginSession()
     }
