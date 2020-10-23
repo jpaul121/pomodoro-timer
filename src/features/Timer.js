@@ -139,10 +139,10 @@ class Timer extends React.Component {
         <h2 id='label' key={this.state.inSession}>
           {this.state.inSession ? 'session' : 'break'}
         </h2>
-        <h1 data-testid='stopwatch' id='stopwatch'>
+        <h1 id='stopwatch'>
           {`${minutes}:${seconds}`}
         </h1>
-        <button data-testid='pause' id='pause' onClick={this.handleTimer}>
+        <button id='pause' onClick={this.handleTimer}>
           pause
         </button>
         <button id='reset' onClick={this.resetTimer}>

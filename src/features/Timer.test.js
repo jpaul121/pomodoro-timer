@@ -1,56 +1,65 @@
-import '@testing-library/jest-dom/extend-expect'
+import {
+  DEFAULT_BREAK,
+  DEFAULT_SESSION
+} from '../constants'
 
-import { fireEvent, render, screen } from '../test-utils'
-
+import { Provider } from 'react-redux'
 import React from 'react'
 import Timer from './Timer'
-import { act } from 'react-dom/test-utils'
+import configureStore from 'redux-mock-store'
+import renderer from 'react-test-renderer'
+
+/* eslint-disable no-sequences */
+
+const mockStore = configureStore([])
 
 jest.useFakeTimers()
 
-describe('Timer', () => {
-  test('renders Timer component', () => {
-    render(<Timer />)
-    
-    expect(screen.getByText(/session/i)).toBeInTheDocument()
-    expect(screen.getByText(/25/)).toBeInTheDocument()
-  })
+describe('Timer component', () => {
+  // variables for TestRenderer
+  let component, instance, store
 
-  test('counts down when unpaused', async () => {
-    act(() => { render(<Timer />) })
+  // aliases for specific nodes
+  let header, timerOutput
+  let pauseButton, resetButton, skipButton
 
-    act(() => {
-      jest.advanceTimersByTime(100)
+  beforeEach(() => {
+    store = mockStore({
+      DEFAULT_BREAK,
+      DEFAULT_SESSION,
+      inSession: true,
     })
 
-    let timerOutput = screen.getAllByRole('heading')[1]
-    expect(timerOutput).toHaveTextContent('25:00')
+    component = renderer.create(
+      <Provider store={store}>
+        <Timer />
+      </Provider>
+    )
 
-    act(() => {
-      jest.advanceTimersByTime(1000)
-    })
-    
-    timerOutput = screen.getAllByRole('heading')[1]
-    expect(timerOutput).toHaveTextContent('24:59')
+    instance = component.root
+
+    header = instance.findByType('h2')
+    timerOutput = instance.findByType('h1')
+
+    pauseButton = instance.findAllByType('button')[0]
   })
-  
-  // test('counts down when unpaused', async () => {
-  //   render(<Timer />)
-    
-  //   const pauseButton = screen.getByText('pause')
-    
-  //   jest.useFakeTimers()
-  //   fireEvent.click(pauseButton)
-  //   setTimeout(
-  //     () => fireEvent.click(pauseButton),
-  //     1250
-  //   )
-  //   // The line below might be needed, but now
-  //   // it's causing an infinite loop?
-  //   // jest.runAllTimers()
-    
-  //   const timerOutput = screen.getAllByRole('heading')[1]
-    
-  //   expect(timerOutput).toHaveTextContent('24:59')
-  // })
+
+  it('should render <Timer /> with given state from Redux store', () => {
+    expect(component.toJSON()).toMatchSnapshot()
+  })
+
+  it('should display correct values upon initial render', () => {
+    expect(header.children).toEqual(['session'])
+    expect(timerOutput.children).toEqual(['25:00'])
+  })
+
+  it('should update state, display values when pause button is pressed', () => {    
+    renderer.act(() => {
+      pauseButton.props.onClick()
+    })
+
+    jest.advanceTimersByTime(1100)
+
+    expect(timerOutput.children).toEqual(['24:59'])
+  })
 })
