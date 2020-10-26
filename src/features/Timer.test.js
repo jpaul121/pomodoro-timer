@@ -1,65 +1,53 @@
-import {
-  DEFAULT_BREAK,
-  DEFAULT_SESSION
-} from '../constants'
-
 import { Provider } from 'react-redux'
 import React from 'react'
-import Timer from './Timer'
-import configureStore from 'redux-mock-store'
-import renderer from 'react-test-renderer'
-
-/* eslint-disable no-sequences */
-
-const mockStore = configureStore([])
+import { Timer } from './Timer'
+import { shallow } from 'enzyme'
+import store from '../app/store'
 
 jest.useFakeTimers()
 
 describe('Timer component', () => {
-  // variables for TestRenderer
-  let component, instance, store
+  let wrapper
+  const mockDispatch = jest.fn()
 
   // aliases for specific nodes
   let header, timerOutput
   let pauseButton, resetButton, skipButton
 
   beforeEach(() => {
-    store = mockStore({
-      DEFAULT_BREAK,
-      DEFAULT_SESSION,
-      inSession: true,
-    })
-
-    component = renderer.create(
-      <Provider store={store}>
-        <Timer />
-      </Provider>
+    wrapper = shallow(
+      <Timer switchMode={mockDispatch} />,
     )
-
-    instance = component.root
-
-    header = instance.findByType('h2')
-    timerOutput = instance.findByType('h1')
-
-    pauseButton = instance.findAllByType('button')[0]
+    
+    header = wrapper.find('#label')
+    timerOutput = wrapper.find('#stopwatch')
+    
+    pauseButton = wrapper.find('#pause')
+    resetButton = wrapper.find('#reset')
+    skipButton = wrapper.find('#skip')
   })
 
-  it('should render <Timer /> with given state from Redux store', () => {
-    expect(component.toJSON()).toMatchSnapshot()
+  afterEach(() => {
+    wrapper = null
   })
 
-  it('should display correct values upon initial render', () => {
-    expect(header.children).toEqual(['session'])
-    expect(timerOutput.children).toEqual(['25:00'])
-  })
+  it('should properly render all its nodes', () => {
+    expect(header).toHaveLength(1)
+    expect(header.text()).toBe('session')
 
-  it('should update state, display values when pause button is pressed', () => {    
-    renderer.act(() => {
-      pauseButton.props.onClick()
-    })
+    expect(timerOutput).toHaveLength(1)
+    expect(timerOutput.text()).toBe('25:00')
 
-    jest.advanceTimersByTime(1100)
+    expect(pauseButton).toHaveLength(1)
+    expect(pauseButton.text()).toBe('pause')
+    expect(pauseButton.prop('onClick')).toEqual(expect.any(Function))
 
-    expect(timerOutput.children).toEqual(['24:59'])
+    expect(resetButton).toHaveLength(1)
+    expect(resetButton.text()).toBe('reset')
+    expect(resetButton.prop('onClick')).toEqual(expect.any(Function))
+
+    expect(skipButton).toHaveLength(1)
+    expect(skipButton.text()).toBe('skip')
+    expect(skipButton.prop('onClick')).toEqual(expect.any(Function))
   })
 })

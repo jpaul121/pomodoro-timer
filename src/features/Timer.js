@@ -10,13 +10,13 @@ import { switchMode } from './pomodoroSlice'
 
 /* eslint-disable no-useless-constructor */
 
-class Timer extends React.Component {
+export class Timer extends React.Component {
   constructor(props) {
     super(props)
     
     this.state = {
-      currentTime: this.props.sessionLength,
-      inSession: this.props.inSession,
+      currentTime: this.props.sessionLength || (MINUTE_MS * 25),
+      inSession: this.props.inSession || true,
       paused: true,
       timerId: null,
     }
