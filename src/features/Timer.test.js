@@ -1,22 +1,31 @@
-import { Provider } from 'react-redux'
+import {
+  DEFAULT_BREAK,
+  DEFAULT_SESSION,
+} from '../constants'
+
 import React from 'react'
 import { Timer } from './Timer'
 import { shallow } from 'enzyme'
-import store from '../app/store'
 
 jest.useFakeTimers()
 
 describe('Timer component', () => {
   let wrapper
-  const mockDispatch = jest.fn()
 
   // aliases for specific nodes
   let header, timerOutput
   let pauseButton, resetButton, skipButton
 
+  const mockProps = {
+    breakLength: DEFAULT_BREAK,
+    inSession: true,
+    sessionLength: DEFAULT_SESSION,
+    switchMode: jest.fn(),
+  }
+
   beforeEach(() => {
     wrapper = shallow(
-      <Timer switchMode={mockDispatch} />,
+      <Timer {...mockProps} />
     )
     
     header = wrapper.find('#label')
@@ -49,5 +58,13 @@ describe('Timer component', () => {
     expect(skipButton).toHaveLength(1)
     expect(skipButton.text()).toBe('skip')
     expect(skipButton.prop('onClick')).toEqual(expect.any(Function))
+  })
+
+  it('should count down properly', () => {
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(1250)
+    wrapper.update()
+    expect(wrapper.state('paused')).toBe(false)
+    expect(wrapper.state('currentTime')).toEqual(1499000) // 24:59 in ms
   })
 })

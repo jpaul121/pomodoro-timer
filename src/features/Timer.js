@@ -15,8 +15,8 @@ export class Timer extends React.Component {
     super(props)
     
     this.state = {
-      currentTime: this.props.sessionLength || (MINUTE_MS * 25),
-      inSession: this.props.inSession || true,
+      currentTime: this.props.sessionLength,
+      inSession: this.props.inSession,
       paused: true,
       timerId: null,
     }
