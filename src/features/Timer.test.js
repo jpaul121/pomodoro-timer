@@ -9,7 +9,7 @@ import { shallow } from 'enzyme'
 
 jest.useFakeTimers()
 
-describe('Timer component', () => {
+describe('<Timer />', () => {
   let wrapper
 
   // aliases for specific nodes
@@ -64,7 +64,76 @@ describe('Timer component', () => {
     wrapper.instance().handleTimer()
     jest.advanceTimersByTime(1250)
     wrapper.update()
+    
+    expect(wrapper.state('timerId')).toEqual(expect.any(Number))
     expect(wrapper.state('paused')).toBe(false)
-    expect(wrapper.state('currentTime')).toEqual(1499000) // 24:59 in ms
+    expect(wrapper.state('currentTime')).toBe(1499000) // 24:59 in ms
+  })
+
+  it('should pause properly', () => {
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(1250)
+    wrapper.instance().handleTimer()
+    wrapper.update()
+
+    expect(wrapper.state('timerId')).toBe(null)
+    expect(wrapper.state('paused')).toBe(true)
+    expect(wrapper.state('currentTime')).toBe(1499000) // 24:59 in ms
+  })
+
+  it('should continue to break at the end of a session\'s countdown', () => {
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(DEFAULT_SESSION + 1250)
+    wrapper.update()
+    header = wrapper.find('#label')
+
+    expect(wrapper.state('timerId')).toBe(null)
+    expect(wrapper.state('paused')).toBe(true)
+    expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
+    expect(wrapper.state('inSession')).toBe(false)
+    expect(header.text()).toBe('break')
+  })
+
+  it('should reset sessions properly', () => {
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(1250)
+    wrapper.instance().resetTimer()
+    wrapper.update()
+    header = wrapper.find('#label')
+
+    expect(wrapper.state('timerId')).toBe(null)
+    expect(wrapper.state('paused')).toBe(true)
+    expect(wrapper.state('currentTime')).toBe(DEFAULT_SESSION)
+    expect(wrapper.state('inSession')).toBe(true)
+    expect(header.text()).toBe('session')
+  })
+
+  it('should skip to breaks properly', () => {
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(1250)
+    wrapper.instance().skip()
+    wrapper.update()
+    header = wrapper.find('#label')
+
+    expect(wrapper.state('timerId')).toBe(null)
+    expect(wrapper.state('paused')).toBe(true)
+    expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
+    expect(wrapper.state('inSession')).toBe(false)
+    expect(header.text()).toBe('break')
+  })
+
+  it('should reset breaks properly', () => {
+    wrapper.instance().skip()
+    wrapper.instance().handleTimer()
+    jest.advanceTimersByTime(1250)
+    wrapper.instance().resetTimer()
+    wrapper.update()
+    header = wrapper.find('#label')
+    
+    expect(wrapper.state('timerId')).toBe(null)
+    expect(wrapper.state('paused')).toBe(true)
+    expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
+    expect(wrapper.state('inSession')).toBe(false)
+    expect(header.text()).toBe('break')
   })
 })

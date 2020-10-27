@@ -105,7 +105,7 @@ export class Timer extends React.Component {
   }
 
   resetTimer() {
-    this.props.inSession
+    this.state.inSession
       ? this.beginSession()
       : this.beginBreak()
   }
