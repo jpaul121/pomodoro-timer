@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import reducer from '../features/pomodoroSlice'
+import reducer from '../features/timerSlice'
 
 const store = configureStore({
   reducer: reducer

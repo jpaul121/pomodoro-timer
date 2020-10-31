@@ -6,7 +6,7 @@ import {
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { switchMode } from './pomodoroSlice'
+import { switchMode } from './timerSlice'
 
 /* eslint-disable no-useless-constructor */
 
@@ -158,9 +158,9 @@ export class Timer extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    breakLength: state['DEFAULT_BREAK'],
+    breakLength: state['breakLength'],
     inSession: state['inSession'],
-    sessionLength: state['DEFAULT_SESSION'],
+    sessionLength: state['sessionLength'],
   };
 }
 

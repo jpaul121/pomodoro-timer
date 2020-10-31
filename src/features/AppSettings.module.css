@@ -2,7 +2,8 @@
   align-items: center;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  width: 40vh;
 }
 
 .settings .session, .settings .break {

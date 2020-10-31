@@ -7,7 +7,7 @@ import {
   decrementSession,
   incrementBreak,
   incrementSession,
-} from './pomodoroSlice'
+} from './timerSlice'
 
 import React from 'react'
 import { connect } from 'react-redux'
@@ -56,7 +56,7 @@ export class AppSettings extends React.Component {
           <button 
             className={styles['incrementSession']} 
             id='sessionUp'
-            onClick={this.props.incrementSession}
+            onClick={() => this.props.dispatch(incrementSession())}
             >
             up
           </button>
@@ -66,7 +66,7 @@ export class AppSettings extends React.Component {
           <button 
             className={styles['decrementSession']} 
             id='sessionDown'
-            onClick={this.props.decrementSession}
+            onClick={() => this.props.dispatch(decrementSession())}
             >
             down
           </button>
@@ -78,7 +78,7 @@ export class AppSettings extends React.Component {
           <button 
             className={styles['incrementBreak']} 
             id='breakUp'
-            onClick={this.props.incrementBreak}
+            onClick={() => this.props.dispatch(incrementBreak())}
             >
             up
           </button>
@@ -88,7 +88,7 @@ export class AppSettings extends React.Component {
           <button 
             className={styles['decrementBreak']} 
             id='breakDown'
-            onClick={this.props.decrementBreak}
+            onClick={() => this.props.dispatch(decrementBreak())}
             >
             down
           </button>
@@ -100,22 +100,13 @@ export class AppSettings extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    breakLength: state['DEFAULT_BREAK'],
+    breakLength: state['breakLength'],
     inSession: state['inSession'],
-    sessionLength: state['DEFAULT_SESSION'],
-  };
-}
-
-function mapDispatchToProps() {
-  return {
-    decrementBreak,
-    decrementSession,
-    incrementBreak,
-    incrementSession,
+    sessionLength: state['sessionLength'],
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(AppSettings)
