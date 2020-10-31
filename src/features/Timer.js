@@ -16,7 +16,6 @@ export class Timer extends React.Component {
     
     this.state = {
       currentTime: this.props.sessionLength,
-      inSession: this.props.inSession,
       paused: true,
       timerId: null,
     }
@@ -25,9 +24,6 @@ export class Timer extends React.Component {
     this.beginSession = this.beginSession.bind(this)
     this.changeMode = this.changeMode.bind(this)
     this.clearTimer = this.clearTimer.bind(this)
-    this.handleTimer = this.handleTimer.bind(this)
-    this.resetTimer = this.resetTimer.bind(this)
-    this.skip = this.skip.bind(this)
     this.togglePause = this.togglePause.bind(this)
   }
   
@@ -60,10 +56,9 @@ export class Timer extends React.Component {
   }
 
   changeMode() {
-    this.props.switchMode()
-    this.setState(state => {
-      return { inSession: !state.inSession };
-    })
+    if (this.props.dispatch) {
+      this.props.dispatch(switchMode())
+    }
   }
 
   clearTimer() {
@@ -74,7 +69,7 @@ export class Timer extends React.Component {
   }
   
   timeOut() {
-    this.state.inSession
+    this.props.inSession
       ? this.beginBreak()
       : this.beginSession()
 
@@ -105,13 +100,13 @@ export class Timer extends React.Component {
   }
 
   resetTimer() {
-    this.state.inSession
+    this.props.inSession
       ? this.beginSession()
       : this.beginBreak()
   }
 
   skip() {
-    if (this.state.inSession) {
+    if (this.props.inSession) {
       this.changeMode()
       this.setState((_, props) => {
         return { currentTime: props.breakLength };
@@ -136,19 +131,19 @@ export class Timer extends React.Component {
     
     return (
       <div id='timer'>
-        <h2 id='label' key={this.state.inSession}>
-          {this.state.inSession ? 'session' : 'break'}
+        <h2 id='label' key={this.props.inSession}>
+          {this.props.inSession ? 'session' : 'break'}
         </h2>
         <h1 id='stopwatch'>
           {`${minutes}:${seconds}`}
         </h1>
-        <button id='pause' onClick={this.handleTimer}>
+        <button id='pause' onClick={this.handleTimer.bind(this)}>
           pause
         </button>
-        <button id='reset' onClick={this.resetTimer}>
+        <button id='reset' onClick={this.resetTimer.bind(this)}>
           reset
         </button>
-        <button id='skip' onClick={this.skip}>
+        <button id='skip' onClick={this.skip.bind(this)}>
           skip
         </button>
       </div>
@@ -164,11 +159,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps() {
-  return { switchMode };
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(Timer)

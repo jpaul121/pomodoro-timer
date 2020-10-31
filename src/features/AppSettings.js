@@ -11,35 +11,9 @@ import {
 
 import React from 'react'
 import { connect } from 'react-redux'
-import equal from 'fast-deep-equal'
 import styles from './AppSettings.module.css'
 
-/* eslint-disable no-useless-constructor */
-
 export class AppSettings extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      breakLength: this.props.breakLength,
-      inSession: this.props.inSession,
-      sessionLength: this.props.sessionLength,
-    }
-  }
-
-  // lifecycle methods
-  componentDidUpdate(prevProps) {
-    if (!equal(this.props, prevProps)) {
-      this.setState((_, props) => {
-        return {
-          breakLength: props.breakLength,
-          inSession: props.inSession,
-          sessionLength: props.sessionLength,
-        };
-      })
-    }
-  }
-
   render() {
     let breakLength = Math.floor(this.props.breakLength / MINUTE_MS) % MINUTE_S
     breakLength = ('0' + breakLength).slice(-2)

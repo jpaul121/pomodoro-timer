@@ -27,7 +27,7 @@ export const timerSlice = createSlice({
       state['sessionLength'] += MINUTE_MS
     },
     switchMode(state) {
-      state['switchMode'] = !state['switchMode']
+      state['inSession'] = !state['inSession']
     },
   }
 })

@@ -84,14 +84,13 @@ describe('<Timer />', () => {
   it('should continue to break at the end of a session\'s countdown', () => {
     wrapper.instance().handleTimer()
     jest.advanceTimersByTime(DEFAULT_SESSION + 1250)
+    wrapper.setProps({ inSession: false })
     wrapper.update()
     header = wrapper.find('#label')
 
     expect(wrapper.state('timerId')).toBe(null)
     expect(wrapper.state('paused')).toBe(true)
     expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
-    expect(wrapper.state('inSession')).toBe(false)
-    expect(header.text()).toBe('break')
   })
 
   it('should reset sessions properly', () => {
@@ -104,36 +103,18 @@ describe('<Timer />', () => {
     expect(wrapper.state('timerId')).toBe(null)
     expect(wrapper.state('paused')).toBe(true)
     expect(wrapper.state('currentTime')).toBe(DEFAULT_SESSION)
-    expect(wrapper.state('inSession')).toBe(true)
-    expect(header.text()).toBe('session')
   })
 
   it('should skip to breaks properly', () => {
     wrapper.instance().handleTimer()
     jest.advanceTimersByTime(1250)
     wrapper.instance().skip()
+    wrapper.setProps({ inSession: false })
     wrapper.update()
     header = wrapper.find('#label')
 
     expect(wrapper.state('timerId')).toBe(null)
     expect(wrapper.state('paused')).toBe(true)
     expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
-    expect(wrapper.state('inSession')).toBe(false)
-    expect(header.text()).toBe('break')
-  })
-
-  it('should reset breaks properly', () => {
-    wrapper.instance().skip()
-    wrapper.instance().handleTimer()
-    jest.advanceTimersByTime(1250)
-    wrapper.instance().resetTimer()
-    wrapper.update()
-    header = wrapper.find('#label')
-    
-    expect(wrapper.state('timerId')).toBe(null)
-    expect(wrapper.state('paused')).toBe(true)
-    expect(wrapper.state('currentTime')).toBe(DEFAULT_BREAK)
-    expect(wrapper.state('inSession')).toBe(false)
-    expect(header.text()).toBe('break')
   })
 })
