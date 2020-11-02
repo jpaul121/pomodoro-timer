@@ -4,7 +4,10 @@ import {
   incrementBreak,
   incrementSession,
 } from './timerSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux'
 
 import React from 'react'
 import { getTimerMinutes } from '../helpers'
