@@ -1,10 +1,10 @@
 import {
-   MINUTE_MS,
-   MINUTE_S,
-   SECOND_MS
-} from '../constants'
+  getTimerMinutes,
+  getTimerSeconds,
+} from '../helpers'
 
 import React from 'react'
+import { SECOND_MS } from '../constants'
 import { connect } from 'react-redux'
 import { switchMode } from './timerSlice'
 
@@ -122,12 +122,8 @@ export class Timer extends React.Component {
   }
 
   render() {
-    let ms = this.state.currentTime
-    let seconds = Math.floor(ms / SECOND_MS) % MINUTE_S
-    let minutes = Math.floor(ms / MINUTE_MS) % MINUTE_S
-
-    seconds = ('0' + seconds).slice(-2)
-    minutes = ('0' + minutes).slice(-2)
+    const seconds = getTimerSeconds(this.state.currentTime)
+    const minutes = getTimerMinutes(this.state.currentTime)
     
     return (
       <div id='timer'>
