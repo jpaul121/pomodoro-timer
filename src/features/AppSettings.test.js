@@ -3,7 +3,7 @@ import {
   DEFAULT_SESSION,
 } from '../constants'
 
-import { AppSettings } from './AppSettings'
+import AppSettings from './AppSettings'
 import React from 'react'
 import { shallow } from 'enzyme'
 
@@ -23,7 +23,6 @@ describe('<AppSettings />', () => {
       incrementBreak: jest.fn(),
       decrementSession: jest.fn(),
       incrementSession: jest.fn(),
-      inSession: true,
       sessionLength: DEFAULT_SESSION,
     }
     
