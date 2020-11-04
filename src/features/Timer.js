@@ -19,6 +19,12 @@ export class Timer extends React.Component {
       currentTime: this.props.sessionLength,
       paused: true,
       timerId: null,
+      get timerMinutes() {
+        return getTimerMinutes(this.currentTime);
+      },
+      get timerSeconds() {
+        return getTimerSeconds(this.currentTime);
+      },
     }
     
     this.beginBreak = this.beginBreak.bind(this)
@@ -30,9 +36,17 @@ export class Timer extends React.Component {
   
   // lifecycle methods
   componentDidUpdate(_, prevState) {
-    if (prevState['currentTime'] === 0) {
+    if (prevState['currentTime'] !== this.state['currentTime']) {
+      this.setState(state => {
+        return {
+          timerMinutes: getTimerMinutes(state.currentTime),
+          timerSeconds: getTimerSeconds(state.currentTime),
+        };
+      })
+    } else if (prevState['currentTime'] === 0) {
       this.timeOut()
     }
+    document.title = `${this.state.timerMinutes}:${this.state.timerSeconds}`
   }
   
   // class methods
@@ -123,16 +137,13 @@ export class Timer extends React.Component {
   }
 
   render() {
-    const seconds = getTimerSeconds(this.state.currentTime)
-    const minutes = getTimerMinutes(this.state.currentTime)
-    
     return (
       <div className={styles['timer']}>
         <h2 className={styles['label']} key={this.props.inSession}>
           {this.props.inSession ? 'session' : 'break'}
         </h2>
         <h1 className={styles['stopwatch']}>
-          {`${minutes}:${seconds}`}
+          {`${this.state.timerMinutes}:${this.state.timerSeconds}`}
         </h1>
         <div className={styles['button-group']}>
           <button className={styles['pause']} onClick={this.handleTimer.bind(this)}>

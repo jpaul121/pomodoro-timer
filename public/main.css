@@ -34,5 +34,7 @@ h3 {
 .page-title {
   font-weight: bold;
   margin-top: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
