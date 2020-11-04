@@ -25,47 +25,31 @@ export default function AppSettings() {
   return (
     <div className={styles['settings']}>
       <div className={styles['session']}>
-        <h3 className={styles['sessionLabel']}>
+        <h3 className={styles['label']}>
           session
         </h3>
-        <button 
-          className={styles['incrementSession']} 
-          id='sessionUp'
-          onClick={() => dispatch(incrementSession())}
-          >
-          up
+        <button className={styles['up']} onClick={() => dispatch(incrementSession())}>
+          <i class="fas fa-caret-up fa-3x"></i>
         </button>
-        <h4 className={styles['sessionTime']}>
+        <h4 className={styles['time']}>
           {sessionLength}
         </h4>
-        <button 
-          className={styles['decrementSession']} 
-          id='sessionDown'
-          onClick={() => dispatch(decrementSession())}
-          >
-          down
+        <button className={styles['down']} onClick={() => dispatch(decrementSession())}>
+          <i class="fas fa-caret-down fa-3x"></i>
         </button>
       </div>
       <div className={styles['break']}>
-        <h3 className={styles['breakLabel']}>
+        <h3 className={styles['label']}>
           break
         </h3>
-        <button 
-          className={styles['incrementBreak']} 
-          id='breakUp'
-          onClick={() => dispatch(incrementBreak())}
-          >
-          up
+        <button className={styles['up']} onClick={() => dispatch(incrementBreak())}>
+          <i class="fas fa-caret-up fa-3x"></i>
         </button>
-        <h4 className={styles['breakTime']}>
+        <h4 className={styles['time']}>
           {breakLength}
         </h4>
-        <button 
-          className={styles['decrementBreak']} 
-          id='breakDown'
-          onClick={() => dispatch(decrementBreak())}
-          >
-          down
+        <button className={styles['down']} onClick={() => dispatch(decrementBreak())}>
+          <i class="fas fa-caret-down fa-3x"></i>
         </button>
       </div>
     </div>

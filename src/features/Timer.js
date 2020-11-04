@@ -6,6 +6,7 @@ import {
 import React from 'react'
 import { SECOND_MS } from '../constants'
 import { connect } from 'react-redux'
+import styles from './Timer.module.css'
 import { switchMode } from './timerSlice'
 
 /* eslint-disable no-useless-constructor */
@@ -126,22 +127,24 @@ export class Timer extends React.Component {
     const minutes = getTimerMinutes(this.state.currentTime)
     
     return (
-      <div id='timer'>
-        <h2 id='label' key={this.props.inSession}>
+      <div className={styles['timer']}>
+        <h2 className={styles['label']} key={this.props.inSession}>
           {this.props.inSession ? 'session' : 'break'}
         </h2>
-        <h1 id='stopwatch'>
+        <h1 className={styles['stopwatch']}>
           {`${minutes}:${seconds}`}
         </h1>
-        <button id='pause' onClick={this.handleTimer.bind(this)}>
-          pause
-        </button>
-        <button id='reset' onClick={this.resetTimer.bind(this)}>
-          reset
-        </button>
-        <button id='skip' onClick={this.skip.bind(this)}>
-          skip
-        </button>
+        <div className={styles['button-group']}>
+          <button className={styles['pause']} onClick={this.handleTimer.bind(this)}>
+            <i class="fas fa-play fa-2x"></i>
+          </button>
+          <button className={styles['reset']} onClick={this.resetTimer.bind(this)}>
+            <i class="fas fa-redo-alt fa-2x"></i>
+          </button>
+          <button className={styles['skip']} onClick={this.skip.bind(this)}>
+            <i class="fas fa-forward fa-2x"></i>
+          </button>
+        </div>
       </div>
     );
   }

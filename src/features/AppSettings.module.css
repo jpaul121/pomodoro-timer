@@ -1,14 +1,17 @@
 .settings {
   align-items: center;
   display: flex;
+  height: 7em;
   flex-direction: row;
+  margin-top: 2em;
   justify-content: space-between;
-  width: 40vh;
+  width: 25vw;
 }
 
 .settings .session, .settings .break {
   align-items: center;
   display: flex;
+  height: 5em;
   flex-direction: column;
   justify-content: space-evenly;
 }

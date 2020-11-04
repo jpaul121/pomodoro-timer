@@ -1,0 +1,14 @@
+.button-group {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-top: .5rem;
+}
+
+.timer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+}
