@@ -29,13 +29,13 @@ export default function AppSettings() {
           session
         </h3>
         <button className={styles['up']} onClick={() => dispatch(incrementSession())}>
-          <i class="fas fa-caret-up fa-3x"></i>
+          <i className="fas fa-caret-up fa-3x"></i>
         </button>
         <h4 className={styles['time']}>
           {sessionLength}
         </h4>
         <button className={styles['down']} onClick={() => dispatch(decrementSession())}>
-          <i class="fas fa-caret-down fa-3x"></i>
+          <i className="fas fa-caret-down fa-3x"></i>
         </button>
       </div>
       <div className={styles['break']}>
@@ -43,13 +43,13 @@ export default function AppSettings() {
           break
         </h3>
         <button className={styles['up']} onClick={() => dispatch(incrementBreak())}>
-          <i class="fas fa-caret-up fa-3x"></i>
+          <i className="fas fa-caret-up fa-3x"></i>
         </button>
         <h4 className={styles['time']}>
           {breakLength}
         </h4>
         <button className={styles['down']} onClick={() => dispatch(decrementBreak())}>
-          <i class="fas fa-caret-down fa-3x"></i>
+          <i className="fas fa-caret-down fa-3x"></i>
         </button>
       </div>
     </div>

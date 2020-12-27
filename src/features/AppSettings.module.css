@@ -1,9 +1,9 @@
 .settings {
   align-items: center;
   display: flex;
-  height: 7em;
+  height: 7rem;
   flex-direction: row;
-  margin-top: 2em;
+  margin: 2rem auto 0;
   justify-content: space-between;
   width: 25vw;
 }
@@ -11,7 +11,8 @@
 .settings .session, .settings .break {
   align-items: center;
   display: flex;
-  height: 5em;
+  height: 5rem;
   flex-direction: column;
+  margin: 0 auto;
   justify-content: space-evenly;
 }

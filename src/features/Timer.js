@@ -147,13 +147,13 @@ export class Timer extends React.Component {
         </h1>
         <div className={styles['button-group']}>
           <button className={styles['pause']} onClick={this.handleTimer.bind(this)}>
-            <i class="fas fa-play fa-2x"></i>
+            <i className="fas fa-play fa-2x"></i>
           </button>
           <button className={styles['reset']} onClick={this.resetTimer.bind(this)}>
-            <i class="fas fa-redo-alt fa-2x"></i>
+            <i className="fas fa-redo-alt fa-2x"></i>
           </button>
           <button className={styles['skip']} onClick={this.skip.bind(this)}>
-            <i class="fas fa-forward fa-2x"></i>
+            <i className="fas fa-forward fa-2x"></i>
           </button>
         </div>
       </div>
