@@ -31,9 +31,9 @@ export default function AppSettings() {
         <button className={styles['up']} onClick={() => dispatch(incrementSession())}>
           <i className="fas fa-caret-up fa-3x"></i>
         </button>
-        <h4 className={styles['time']}>
+        <h3 className={styles['time']}>
           {sessionLength}
-        </h4>
+        </h3>
         <button className={styles['down']} onClick={() => dispatch(decrementSession())}>
           <i className="fas fa-caret-down fa-3x"></i>
         </button>
@@ -45,9 +45,9 @@ export default function AppSettings() {
         <button className={styles['up']} onClick={() => dispatch(incrementBreak())}>
           <i className="fas fa-caret-up fa-3x"></i>
         </button>
-        <h4 className={styles['time']}>
+        <h3 className={styles['time']}>
           {breakLength}
-        </h4>
+        </h3>
         <button className={styles['down']} onClick={() => dispatch(decrementBreak())}>
           <i className="fas fa-caret-down fa-3x"></i>
         </button>
