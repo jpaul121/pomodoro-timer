@@ -8,7 +8,7 @@
     <img src="https://www.materialui.co/materialIcons/av/av_timer_black_192x192.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h2 align="center">pomodoro-timer</h2>
+  <h3 align="center">pomodoro-timer</h3>
 
   <p align="center">
     A minimalistic Pomodoro timer built using React. 
