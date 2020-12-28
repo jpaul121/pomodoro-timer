@@ -8,21 +8,15 @@
     <img src="https://www.materialui.co/materialIcons/av/av_timer_black_192x192.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">pomodoro-timer</h3>
+  <h2 align="center">pomodoro-timer</h2>
 
   <p align="center">
     A minimalistic Pomodoro timer built using React. 
     <br />
     <br />
-    <a href="https://jpaul121.github.io/pomodoro-timer/"><strong>Click me.</strong></a>
+    <a href="https://jpaul121.github.io/pomodoro-timer/"><h3>Click me.</h3></a>
   </p>
 </p>
-
-
-
-## About
-
-This is a minimalistically styled, fully functional Pomodoro timer. To get started using it, click on the link above. 
 
 
 
