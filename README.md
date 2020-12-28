@@ -22,7 +22,7 @@
 
 ## About
 
-This is a minimalistically styled, fully functional Pomodoro timer. To get started using it, just click on the link above. 
+This is a minimalistically styled, fully functional Pomodoro timer. To get started using it, click on the link above. 
 
 
 
