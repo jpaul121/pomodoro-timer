@@ -14,8 +14,7 @@
     A minimalistic Pomodoro timer built using React. 
     <br />
     <br />
-    <br />
-    <a href="https://jpaul121.github.io/pomodoro-timer/">Click me.</a>
+    <a href="https://jpaul121.github.io/pomodoro-timer/"><strong>Click me.</strong></a>
   </p>
 </p>
 
@@ -23,7 +22,7 @@
 
 ## About
 
-This is a minimalistically styled, fully functional Pomodoro timer built using React. To get started using it, just click on the link above. 
+This is a minimalistically styled, fully functional Pomodoro timer. To get started using it, just click on the link above. 
 
 
 
